@@ -1,5 +1,10 @@
+# Uploads
+uploads/*
+!.gitkeep
+
 # Logs
-logs
+logs/*
+!.gitkeep
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -35,6 +40,7 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
+build/
 build/Release
 
 # Dependency directories
@@ -52,6 +58,7 @@ typings/
 
 # Optional eslint cache
 .eslintcache
+.eslintrc.js
 
 # Microbundle cache
 .rpt2_cache/
