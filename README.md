@@ -1,6 +1,6 @@
-# MyBlockbuster
+# Alta Previa BACKEND
 
-MyBlockbuster es la renovacion de Blockbuster.
+EL MEJOR BACK QUE VAS A VER EN TU VIDA
 
 ## Pre-requisitos 📋
 
