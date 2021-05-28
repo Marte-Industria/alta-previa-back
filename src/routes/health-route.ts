@@ -23,6 +23,6 @@ const healthController = new HealthController();
  *         $ref: '#/components/schemas/Response'
  *        examples:
  *         health-ok:
- *          $ref: '#/components/mocks/health-ok'
+ *          $ref: '#/components/examples/health-ok'
  */
 healthRoute.get('/health', healthController.dependencies)

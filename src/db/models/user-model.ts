@@ -36,6 +36,15 @@ const UserSchema = new Schema(
       index: true,
       required: [true, 'El correo es necesario']
     },
+    socialRed: {
+      type: {
+        username: { type: String, required: true },
+        url: { type: String, required: true },
+        isVisible: { type: Boolean, required: true }
+      },
+      ref: 'Social Red',
+      required: false
+    },
     password: {
       type: String,
       ref: 'Password',
@@ -65,17 +74,17 @@ const UserSchema = new Schema(
       ref: 'Created',
       required: [true, 'El Creado es necesario']
     }
-  },{
-    collection: 'user',
-    toJSON: {
-      virtuals: true
-    }
+  }, {
+  collection: 'user',
+  toJSON: {
+    virtuals: true
   }
+}
 )
 
 const UserModel = mongoose.model('User', UserSchema)
 
-export{ 
+export {
   UserSchema,
   UserModel
 }

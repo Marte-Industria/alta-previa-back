@@ -1,5 +1,8 @@
-export type tokenType = {
-  id_user?: string;
-  role_user?: string;
-  country_user?: string;
+type Token = {
+  alias: string;
+  country: string;
+}
+
+export {
+  Token
 }

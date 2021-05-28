@@ -8,7 +8,9 @@ import {
   swaggerRoute,
   securityRoute,
   healthRoute,
-  userRoute
+  userRoute,
+  iNeverRoute,
+  synonymRoute
 } from './routes'
 import { CONNECTION_STRING } from './constants'
 
@@ -39,6 +41,8 @@ mongoose.connect(CONNECTION_STRING, {
     app.use('/', securityRoute)
     app.use('/apidoc', swaggerRoute)
     app.use('/users', tokenVerification,userRoute)
+    app.use('/i-nevers', tokenVerification,iNeverRoute)
+    app.use('/synonyms', tokenVerification,synonymRoute)
 
     //app.use(errorHandlers)
   }).catch((err: any) =>{

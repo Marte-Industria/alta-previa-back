@@ -1,19 +1,19 @@
 import {Router} from 'express';
-import {UserController} from '../controllers/user-controller';
+import {SynonymController} from '../controllers/synonym-controller';
 
-export const userRoute = Router()
-const userController = new UserController();
+export const synonymRoute = Router()
+const synonymController = new SynonymController();
 
-/**
+ /**
  * @openapi
- *  /users:
+ *  /synonyms/by-user:
  *   get:
  *    tags:
- *     - User
+ *     - Synonym
  *    security:
  *     - bearerAuthorization: []
- *    summary: Obtiene usuario logeado
- *    description: Obtiene usuario logeado.
+ *    summary: Obtiene los sinonimos creado por el usuario
+ *    description: Obtiene sinonimos creado por el usuario.
  *    responses:
  *     200:
  *      description: successful operation.
@@ -25,26 +25,28 @@ const userController = new UserController();
  *         health-ok:
  *          $ref: '#/components/examples/health-ok'
  */
- userRoute.get('/', userController.readUser)
+  synonymRoute.get('/by-user', synonymController.getManyByUser)
 
 /**
  * @openapi
- *  /users:
- *   put:
+ *  /synonyms:
+ *   post:
  *    tags:
- *     - User
+ *     - Synonym
  *    security:
  *     - bearerAuthorization: []
- *    summary: Actualiza usuario logeado
- *    description:  Actualiza usuario logeado.
+ *    summary: Crea un sinonimo
+ *    description:  Crea un sinonimo para sustituir en el juego.
  *    requestBody:
  *     content:
  *      application/json:
  *       schema:
  *        type: object
  *        properties: 
- *         user:
- *          $ref: '#/components/schemas/User'
+ *         synonym:
+ *           type: array
+ *           items:
+ *            $ref: '#/components/schemas/Synonym'
  *    responses:
  *     200:
  *      description: successful operation.
@@ -56,18 +58,18 @@ const userController = new UserController();
  *         health-ok:
  *          $ref: '#/components/examples/health-ok'
  */
-   userRoute.put('/', userController.updateUser)
+    synonymRoute.post('/', synonymController.createMany)
 
  /**
  * @openapi
- *  /users:
+ *  /synonyms:
  *   delete:
  *    tags:
- *     - User
+ *     - Synonym
  *    security:
  *     - bearerAuthorization: []
- *    summary: Elimina usuario logeado
- *    description:  Elimina usuario logeado.
+ *    summary: Deshabilitada un sinonimo
+ *    description:  Deshabilitado un sinonimo creado por el usuario. No sera utilizado en los juegos
  *    responses:
  *     200:
  *      description: successful operation.
@@ -79,4 +81,4 @@ const userController = new UserController();
  *         health-ok:
  *          $ref: '#/components/examples/health-ok'
  */
-  userRoute.delete('/', userController.disabledUser)
+  synonymRoute.delete('/', synonymController.disabled)

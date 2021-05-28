@@ -1,3 +1,5 @@
 export * from './health-service'
 export * from './user-service'
 export * from './security-service'
+export * from './iNever-service'
+export * from './synonym-service'

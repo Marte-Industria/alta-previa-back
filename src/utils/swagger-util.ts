@@ -1,6 +1,7 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
 import { VERSION_API } from '../constants';
+import { HEALTH_RES_OK } from '../../tests/mocks/health-mocks'
 
 // Reference: https://swagger.io/specification
 // Example: https://petstore3.swagger.io
@@ -16,27 +17,6 @@ const swaggerDocs = swaggerJsdoc({
                 email: 'martes@marteproducciones.com.ar'
             },
         },
-        tags:[
-            {
-                name :"Health"
-            },
-            {
-                name :"Security"
-            },
-            {
-                name :"User"
-            }
-        ],
-        servers: [
-            {
-                url: `http://localhost:3000`,
-                description: 'Local server',
-            },
-            {
-                url: `https://martes.atr.cumbia.gato.piola`,
-                description: `Entorno de produccion`,
-            }
-        ],
         components: {
             'schemas': {
                 'Response': {
@@ -71,6 +51,24 @@ const swaggerDocs = swaggerJsdoc({
                             'format': 'email',
                             'example': 'eybul@gmail.com'
                         },
+                        'socialRed': {
+                            'type': 'object',
+                            'properties': {
+                                'username': {
+                                    'type': 'string',
+                                    'example': 'abbulrodriguez'
+                                },
+                                'url': {
+                                    'type': 'string',
+                                    'format': 'url',
+                                    'example': 'www.instagram.com'
+                                },
+                                'isVisible': {
+                                    'type': 'boolean',
+                                    'example': true
+                                }
+                            }
+                        },
                         'password': {
                             'type': 'string',
                             'format': 'password',
@@ -86,41 +84,101 @@ const swaggerDocs = swaggerJsdoc({
                         }
                     }
                 },
-                'Pdf417': {
+                'RestorePassword': {
+                    'type': 'object',
+                    'properties': {
+                        'email': {
+                            'type': 'string',
+                            'format': 'email',
+                            'example': 'eybul@gmail.com'
+                        },
+                        'password': {
+                            'type': 'string',
+                            'format': 'password',
+                            'example': 'admin01'
+                        }
+                    }
+                },
+                'ChangePassword': {
+                    'type': 'object',
+                    'properties': {
+                        'password': {
+                            'type': 'string',
+                            'format': 'password',
+                            'example': 'admin01'
+                        }
+                    }
+                },
+                'INever': {
+                    'type': 'object',
+                    'properties': {
+                        'level': {
+                            'type': 'string',
+                            'enum': ['normal', 'semi'],
+                            'example': 'normal'
+                        },
+                        'body': {
+                            'type': 'string',
+                            'example': 'Yo nunca programe en powerBuilder'
+                        },
+                        'is_spicy': {
+                            'type': 'boolean',
+                            'example': true
+                        }
+                    }
+                },
+                'Synonym': {
                     'type': 'object',
                     'properties': {
                         'type': {
                             'type': 'string',
-                            'enum': ['front', 'back'],
-                            'example': 'front'
+                            'enum': ['insult', 'idiom'],
+                            'example': 'idiom'
                         },
-                        'image': {
+                        'key': {
                             'type': 'string',
-                            'format': 'base64',
-                            'example': 'data:image/jpeg;base64,/9j/4...'
+                            'example': 'girl'
+                        },
+                        'value': {
+                            'type': 'string',
+                            'example': 'mina'
+                        },
+                        'country': {
+                            'type': 'string',
+                            'example': 'ar'
                         }
                     }
                 }
             },
             'parameters': {
-                'ioi': {
-                    'name': 'internalOperationId',
-                    'in': 'header',
-                    'description': 'Internal uuidv4 code',
+                'isSpacy': {
+                    'name': 'is_spacy',
+                    'in': 'query',
+                    'description': 'Picante',
                     'required': true,
                     'schema': {
-                        'type': 'string',
-                        'example': '75442486-0878-440c-9db1-a7006c25a39f'
+                        'type': 'boolean',
+                        'example': true
                     }
                 },
-                'dni': {
-                    'name': 'dni',
+                'level': {
+                    'name': 'level',
                     'in': 'query',
-                    'description': 'del usuario',
+                    'description': 'nivel del juego',
                     'required': true,
                     'schema': {
                         'type': 'string',
-                        'example': '30333666'
+                        'example': 'normal'
+                    }
+                },
+                'id': {
+                    'name': 'id',
+                    'in': 'path',
+                    'description': 'id del documento',
+                    'required': true,
+                    'schema': {
+                        'type': 'string',
+                        'example': '60affbd8467b34ee48d6ebf6'
                     }
                 }
             },
@@ -139,9 +197,9 @@ const swaggerDocs = swaggerJsdoc({
                     'description': 'Entity not found.'
                 }
             },
-            'mocks': {
-                'health-ok': {},
-                'rostro-ok': {},
+            'examples': {
+                'health-ok': HEALTH_RES_OK,
+                'rostro-ok': ['asd'],
                 'pdf417-ok': {},
                 'new-operation-ok': {},
                 'retry-discount-ok': {}
@@ -153,7 +211,7 @@ const swaggerDocs = swaggerJsdoc({
                 },
                 "bearerAuthorization": {
                     'type': "http",
-                    'scheme':"bearer",
+                    'scheme': "bearer",
                     'bearerFormat': "JWT"
                 }
             }

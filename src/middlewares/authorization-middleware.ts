@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { SECRET_KEY_REFRESH_TOKEN, SECRET_KEY_TOKEN } from '../constants'
 import { TokenError } from '../exceptions'
+import { Token } from '../types'
 import { responseJSON } from '../utils'
 
-const logicVerification = (secreteKey: string, authorization: any) : any => {
-  let decoded;
-  if (!authorization || typeof authorization !== 'string') {
+const logicVerification = (secreteKey: string, authorization?: string) : Token => {
+  let decoded :any;
+  if (!authorization) {
     throw new TokenError(401, 'Authorization not found')
   }
 
@@ -26,15 +27,21 @@ const logicVerification = (secreteKey: string, authorization: any) : any => {
     throw new TokenError(400, 'Invalid Token')
   }
 
-  const aud = Object.prototype.hasOwnProperty.call(decoded, 'aud')
-  const iss = Object.prototype.hasOwnProperty.call(decoded, 'iss')
-  const sub = Object.prototype.hasOwnProperty.call(decoded, 'sub')
+  [
+    'aud',
+    'iss',
+    'sub',
+    'country'
+  ].forEach((prop)=>{
+    if(!Object.prototype.hasOwnProperty.call(decoded,prop)){
+      throw new TokenError(400, 'Corrupt token')
+    }
+  })
 
-  if (!aud || !iss || !sub) {
-    throw new TokenError(400, 'Corrupt token')
+  return {
+    alias : decoded.sub,
+    country : decoded.country
   }
-
-  return decoded
 }
 
 const tokenVerification = async (req: Request, res: Response, next: NextFunction) => {
@@ -42,7 +49,8 @@ const tokenVerification = async (req: Request, res: Response, next: NextFunction
     const { authorization } = req.headers
     const decoded = logicVerification(SECRET_KEY_TOKEN, authorization)
 
-    req.body.JWT_ALIAS = decoded.sub
+    req.body.JWT_ALIAS = decoded.alias
+    req.body.JWT_COUNTRY = decoded.country
     next()
   } catch (error) {
     return (error instanceof TokenError)
@@ -56,7 +64,8 @@ const refreshTokenVerification = async (req: Request, res: Response, next: NextF
     const { authorization } = req.headers
     const decoded = logicVerification(SECRET_KEY_REFRESH_TOKEN, authorization)
 
-    req.body.JWT_ALIAS = decoded.sub
+    req.body.JWT_ALIAS = decoded.alias
+    req.body.JWT_COUNTRY = decoded.country
     next()
   } catch (error) {
     return (error instanceof TokenError)

@@ -1,6 +1,7 @@
 import UserRepository from '../db/repositories/user-repository';
+import { DocumentNotFoundError } from '../exceptions';
 
-export default class UserService {
+class UserService {
 
     private userRepository;
 
@@ -11,22 +12,25 @@ export default class UserService {
     async updateUser(alias: string, payloadUser: any) {
 
         const user = {
-            firstName : payloadUser.firstName,
-            updatedAt: new Date(new Date().toLocaleString('es-AR', {timeZone: 'America/Argentina/Buenos_Aires'}))
+            firstName: payloadUser.firstName,
+            lastName: payloadUser.lastName,
+            email: payloadUser.email,
+            updatedAt: new Date(new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }))
         }
         return await this.userRepository.update(alias, user)
     }
 
     async readUser(alias: string) {
-        return await this.userRepository.getByAlias(alias);
+        return await this.userRepository.getOneByPropertys({alias});
     }
 
-    async disabledUser(alias: string) {
-        return await this.userRepository.disabled(alias);
+    async disabled(alias: string) : Promise<boolean> {
+        const result = await this.userRepository.disabled(alias)
+        if (!result) {
+            throw new DocumentNotFoundError(alias)
+        }
+        return true;
     }
-
-    private async seguridadDeClave(password: string) {
-        return password.length > 8;
-    }
-
 }
+
+export { UserService }

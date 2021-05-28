@@ -1,3 +1,5 @@
 export * from './health-controller'
 export * from './user-controller'
 export * from './security-controller'
+export * from './iNever-controller'
+export * from './synonym-controller'

@@ -1,4 +1,4 @@
-import { UserModel } from '../models/userModel';
+import { UserModel } from '../models/user-model';
 import { Model } from 'mongoose';
 
 class UserRepository {
@@ -13,12 +13,8 @@ class UserRepository {
     return await this.model.findById(id)
   }
 
-  async getByEmail(email: string) {
-    return await this.model.findOne({ email })
-  }
-
-  async getByAlias(alias: string) {
-    return await this.model.findOne({ alias })
+  async getOneByPropertys(property: Object) {
+    return await this.model.findOne({ ...property })
   }
 
   async create(user: Object) {
@@ -29,6 +25,18 @@ class UserRepository {
     return await this.model.findOneAndUpdate(
       { alias },
       user,
+      {
+        new: true,
+        runValidators: true,
+        context: 'query'
+      }
+    )
+  }
+
+  async updatePassword(alias : string, password: string) {
+    return await this.model.findOneAndUpdate(
+      { alias },
+      { password },
       {
         new: true,
         runValidators: true,
